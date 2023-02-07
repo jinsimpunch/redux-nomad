@@ -1,49 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
-const useInput = (initialValue, validator) => {
+const useTitle = (initialTitle) => {
 
-  const [value, setValue] = useState(initialValue);
-  const onChange = (e) => {
-    const {
-      target: { value }
-    } = e
+  const [title, setTitle] = useState(initialTitle);
 
-
-    let willUpdate = true;
-
-    if (typeof validator === "function") {
-      willUpdate = validator(value);
-    }
-
-    if (willUpdate) {
-
-      setValue(value)
-
-    }
-
-
-
+  const updateTitle = () => {
+    const htmlTitle = document.querySelector('title')
+    htmlTitle.innerText = title;
   }
 
+  useEffect(updateTitle, [title])
 
-  return { value, onChange };
 
+  return setTitle;
 }
-
-
-
 
 function App() {
 
-  const maxLen = (value) => !value.includes("@")
-  const name = useInput("Mr.", maxLen)
+
+
+  const titleUpdater = useTitle("Loading...")
+  setTimeout(() => titleUpdater("Home"), 5000)
 
 
   return (
     <div>
       <h1>hi~!</h1>
-      <input placeholder="Name" {...name} />
+
     </div>
   );
 }
